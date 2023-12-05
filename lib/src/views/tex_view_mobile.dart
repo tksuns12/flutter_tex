@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_tex/src/utils/core_utils.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:webview_flutter_platform_interface/src/webview_flutter_platform_interface_legacy.dart'
+    as LEGPI;
 
 class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
   WebViewPlusController? _controller;
@@ -37,11 +39,11 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
             onWebViewCreated: (controller) {
               _controller = controller;
             },
-            initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
+            initialMediaPlaybackPolicy: LEGPI.AutoMediaPlaybackPolicy.always_allow,
             backgroundColor: Colors.transparent,
             allowsInlineMediaPlayback: true,
             javascriptChannels: {
-              JavascriptChannel(
+              LEGPI.JavascriptChannel(
                   name: 'TeXViewRenderedCallback',
                   onMessageReceived: (jm) async {
                     double height = double.parse(jm.message);
@@ -52,7 +54,7 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
                     }
                     widget.onRenderFinished?.call(height);
                   }),
-              JavascriptChannel(
+              LEGPI.JavascriptChannel(
                   name: 'OnTapCallback',
                   onMessageReceived: (jm) {
                     widget.child.onTapCallback(jm.message);
